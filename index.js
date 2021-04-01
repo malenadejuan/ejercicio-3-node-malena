@@ -24,3 +24,7 @@ app.get("/metro/linea", (req, res, next) => {
 app.use((req, res, next) => {
   res.status(404).json({ error: true, mensaje: "Recurso no encontrado" });
 });
+app.use((err, res, req, next) => {
+  debug(err);
+  res.status(500).json({ error: true, mensaje: "Error general" });
+})
