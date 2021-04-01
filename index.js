@@ -22,11 +22,9 @@ app.get("/metro/lineas", (req, res, next) => {
   pedirLineas();
   res.send(respuesta);
 })
-app.get("/metro/linea", (req, res, next) => {
-  res.send("linea");
-});
-app.get("/metro/lineas", (req, res, next) => {
-  res.send("lolalolalolalola");
+app.get("/metro/linea/:num", (req, res, next) => {
+  const { num } = req.params;
+  res.send(num);
 });
 app.put("/:parametro?", (req, res, next) => {
   res.status(403).json({ error: true, mensaje: "Te pensabas que podías hackerme" });
