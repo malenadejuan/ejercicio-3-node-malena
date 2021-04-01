@@ -15,9 +15,28 @@ server.on("error", err => {
 
 app.use(morgan("dev"));
 app.use(express.static("public"));
-app.get("/", (req, res, next) => {
-  res.send("Hola");
+app.get("/metro/lineas", (req, res, next) => {
+  res.send("lineas");
+})
+app.get("/metro/linea", (req, res, next) => {
+  res.send("linea");
 });
-app.get((req, res, next) => {
-  res.status(404).send("No se ha encontrado");
+app.get("/metro/lineas", (req, res, next) => {
+  res.send("lineas");
 });
+app.put("/:parametro?", (req, res, next) => {
+  res.status(403).json({ error: true, mensaje: "Te pensabas que podías hackerme" });
+});
+app.post("/:parametro?", (req, res, next) => {
+  res.status(403).json({ error: true, mensaje: "Te pensabas que podías hackerme" });
+});
+app.delete("/:parametro?", (req, res, next) => {
+  res.status(403).json({ error: true, mensaje: "Te pensabas que podías hackerme" });
+});
+app.use((req, res, next) => {
+  res.status(404).json({ error: true, mensaje: "Recurso no encontrado" });
+});
+app.use((err, req, res, next) => {
+  debug(err);
+  res.status(500).json({ error: true, mensaje: "Error general" });
+})
