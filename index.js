@@ -6,6 +6,8 @@ const { response } = require("express");
 const express = require("express");
 const app = express();
 
+let respuesta = [];
+
 const server = app.listen(5000, () => {
   console.log("Servidor levantado");
 });
@@ -17,13 +19,14 @@ server.on("error", err => {
 app.use(morgan("dev"));
 app.use(express.static("public"));
 app.get("/metro/lineas", (req, res, next) => {
-  res.send("lineas");
+  pedirLineas();
+  res.send(respuesta);
 })
 app.get("/metro/linea", (req, res, next) => {
   res.send("linea");
 });
 app.get("/metro/lineas", (req, res, next) => {
-  res.send("lineas");
+  res.send("lolalolalolalola");
 });
 app.put("/:parametro?", (req, res, next) => {
   res.status(403).json({ error: true, mensaje: "Te pensabas que podías hackerme" });
@@ -42,14 +45,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: true, mensaje: "Error general" });
 })
 
-const llamarAPI = () => fetch(`${process.env.TMB_LINEAS_API}?app_id=${process.env.TMB_API_APP_ID}&app_key=${process.env.TMB_API_APP_KEY}`)
+const pedirLineas = () => fetch(`${process.env.TMB_LINEAS_API}?app_id=${process.env.TMB_API_APP_ID}&app_key=${process.env.TMB_API_APP_KEY}`)
   .then(resp => resp.json())
   .then(datos => {
-    console.log(datos.features.map(({ properties: { ID_LINIA, NOM_LINIA, DESC_LINIA } }) => ({
+    respuesta = datos.features.map(({ properties: { ID_LINIA, NOM_LINIA, DESC_LINIA } }) => ({
       id: ID_LINIA,
       linea: NOM_LINIA,
       descripcion: DESC_LINIA
-    })));
+    }));
   });
-
-llamarAPI();
