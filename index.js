@@ -1,6 +1,7 @@
 require("dotenv").config();
 const debug = require("debug")("principal");
 const morgan = require("morgan");
+const fetch = require("node-fetch");
 const { response } = require("express");
 const express = require("express");
 const app = express();
@@ -40,3 +41,15 @@ app.use((err, req, res, next) => {
   debug(err);
   res.status(500).json({ error: true, mensaje: "Error general" });
 })
+
+const llamarAPI = () => fetch(`${process.env.TMB_LINEAS_API}?app_id=${process.env.TMB_API_APP_ID}&app_key=${process.env.TMB_API_APP_KEY}`)
+  .then(resp => resp.json())
+  .then(datos => {
+    console.log(datos.features.map(({ properties: { ID_LINIA, NOM_LINIA, DESC_LINIA } }) => ({
+      id: ID_LINIA,
+      linea: NOM_LINIA,
+      descripcion: DESC_LINIA
+    })));
+  });
+
+llamarAPI();
