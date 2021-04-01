@@ -15,9 +15,12 @@ server.on("error", err => {
 
 app.use(morgan("dev"));
 app.use(express.static("public"));
-app.get("/", (req, res, next) => {
-  res.send("Hola");
+app.get("/metro/lineas", (req, res, next) => {
+  res.send("lineas");
+})
+app.get("/metro/linea", (req, res, next) => {
+  res.send("linea");
 });
-app.get((req, res, next) => {
-  res.status(404).send("No se ha encontrado");
+app.use((req, res, next) => {
+  res.status(404).json({ error: true, mensaje: "Recurso no encontrado" });
 });
