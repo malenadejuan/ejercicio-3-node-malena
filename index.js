@@ -8,7 +8,7 @@ const app = express();
 
 let lineasAPI;
 let paradasAPI;
-let respuesta;
+let respuestaLineas;
 let codigoLinea;
 
 const server = app.listen(5000, () => {
@@ -31,7 +31,7 @@ const pedirParadas = (codigoLinea, nombreLineaBuscada) =>
   fetch(`${process.env.TMB_LINEAS_API}/${codigoLinea}/estacions/?app_id=${process.env.TMB_API_APP_ID}&app_key=${process.env.TMB_API_APP_KEY}`)
     .then(resp => resp.json())
     .then(datos => {
-      let linea = respuesta.find(linea => linea.linea === nombreLineaBuscada);
+      let linea = respuestaLineas.find(linea => linea.linea === nombreLineaBuscada);
       paradasAPI = ({
         linea: linea.linea,
         descripcion: linea.descripcion,
@@ -49,7 +49,7 @@ const pedirParadas = (codigoLinea, nombreLineaBuscada) =>
 const devolverLineas = () =>
   pedirLineas()
     .then(() => {
-      respuesta = lineasAPI.map(({ properties: { ID_LINIA, NOM_LINIA, DESC_LINIA } }) => ({
+      respuestaLineas = lineasAPI.map(({ properties: { ID_LINIA, NOM_LINIA, DESC_LINIA } }) => ({
         id: ID_LINIA,
         linea: NOM_LINIA,
         descripcion: DESC_LINIA
@@ -65,7 +65,7 @@ server.on("error", err => {
 app.use(morgan("dev"));
 app.use(express.static("public"));
 app.get("/metro/lineas", (req, res, next) => {
-  res.send(respuesta);
+  res.send(respuestaLineas);
 })
 app.get("/metro/linea/:num", (req, res, next) => {
   const { num } = req.params;
