@@ -72,13 +72,13 @@ app.get("/metro/linea/:num", (req, res, next) => {
   conseguirCodigo(num);
   res.send(paradasAPI);
 });
-app.put("/:parametro?", (req, res, next) => {
+app.put("/*", (req, res, next) => {
   res.status(403).json({ error: true, mensaje: "Te pensabas que podías hackerme" });
 });
-app.post("/:parametro?", (req, res, next) => {
+app.post("/*", (req, res, next) => {
   res.status(403).json({ error: true, mensaje: "Te pensabas que podías hackerme" });
 });
-app.delete("/:parametro?", (req, res, next) => {
+app.delete("/*", (req, res, next) => {
   res.status(403).json({ error: true, mensaje: "Te pensabas que podías hackerme" });
 });
 app.use((req, res, next) => {
@@ -87,5 +87,4 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   debug(err);
   res.status(500).json({ error: true, mensaje: "Error general" });
-})
-
+});
